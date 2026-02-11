@@ -1,13 +1,21 @@
-# FishyWebRTC Transport
+# FishyWebRTC Transport (Modernized Fork)
 
-WebRTC transport for [FishNet](https://github.com/FirstGearGames/FishNet) networking. Enables **WebGL clients** to connect to dedicated servers via WebRTC DataChannels with HTTP signaling.
+**FishyWebRTC** is a high-performance WebRTC transport for [FishNet](https://github.com/FirstGearGames/FishNet). It enables **WebGL clients** to connect to dedicated servers (such as those hosted on Edgegap) using WebRTC DataChannels with HTTP/HTTPS signaling.
 
-Forked from [cakeslice/FishyWebRTC](https://github.com/cakeslice/FishyWebRTC) with FishNet 4.6.18 compatibility fixes.
+This repository is a production-hardened fork of [cakeslice/FishyWebRTC](https://github.com/cakeslice/FishyWebRTC), modernized for Unity 6000 and the latest FishNet versions.
+
+## 🚀 Key Improvements in this Fork
+
+- **Production Ready**: Optimized for dedicated server deployments (Edgegap, AWS, etc.) with HTTPS signaling support.
+- **Modern Unity Support**: Fully compatible with **Unity 6000.2+** and `com.unity.webrtc` 3.0.0-pre.7.
+- **FishNet v4 Compatibility**: Updated to work with FishNet 4.6.19R+ (January 2026), resolving previous logging and API incompatibilities.
+- **Zero-Config UPM**: Packaged for Unity Package Manager (UPM) with `versionDefines`, automatically configuring the `ENABLE_WEBRTC` symbol when dependencies are met.
+- **Enhanced Configuration**: Added runtime API for configuring HTTPS and signaling ports, essential for dynamic cloud deployments.
 
 ## Prerequisites
 
 - **Unity 6000.2+**
-- **FishNet 4.6.18+** (installed in Assets)
+- **FishNet 4.6.19R+** (January 14th, 2026 or newer — installed in Assets)
 - `com.unity.webrtc` 3.0.0-pre.7 (auto-installed as dependency)
 
 ## Installation
