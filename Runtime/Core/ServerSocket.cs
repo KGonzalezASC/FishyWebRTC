@@ -31,6 +31,10 @@ namespace FishNet.Transporting.FishyWebRTC.Server
 		/// </summary>
 		private string _origin;
 		/// <summary>
+		/// Whether to suppress CORS headers on the server.
+		/// </summary>
+		private bool _suppressCorsHeaders;
+		/// <summary>
 		/// Port used by server.
 		/// </summary>
 		private ushort _port;
@@ -100,7 +104,7 @@ namespace FishNet.Transporting.FishyWebRTC.Server
 			_server.onError += _server_onError;
 
 			base.SetConnectionState(LocalConnectionState.Starting, true);
-			_server.Start(_iceServers, _port, _origin);
+			_server.Start(_iceServers, _port, _origin, _suppressCorsHeaders);
 			base.SetConnectionState(LocalConnectionState.Started, true);
 		}
 
@@ -185,7 +189,7 @@ namespace FishNet.Transporting.FishyWebRTC.Server
 		/// <summary>
 		/// Starts the server.
 		/// </summary>
-		internal bool StartConnection(List<Common.ICEServer> iceServers, ushort port, int maximumClients, string origin)
+		internal bool StartConnection(List<Common.ICEServer> iceServers, ushort port, int maximumClients, string origin, bool suppressCorsHeaders)
 		{
 			if (base.GetConnectionState() != LocalConnectionState.Stopped)
 				return false;
@@ -195,6 +199,7 @@ namespace FishNet.Transporting.FishyWebRTC.Server
 			//Assign properties.
 			_port = port;
 			_origin = origin;
+			_suppressCorsHeaders = suppressCorsHeaders;
 			_maximumClients = maximumClients;
 			_iceServers = iceServers;
 			ResetQueues();

@@ -30,7 +30,12 @@ namespace cakeslice.SimpleWebRTC
 
 		public void Start(List<Common.ICEServer> iceServers, ushort port, string origin)
 		{
-			server.Listen(iceServers, port, origin);
+			Start(iceServers, port, origin, false);
+		}
+
+		public void Start(List<Common.ICEServer> iceServers, ushort port, string origin, bool suppressCorsHeaders)
+		{
+			server.Listen(iceServers, port, origin, suppressCorsHeaders);
 			Active = true;
 		}
 

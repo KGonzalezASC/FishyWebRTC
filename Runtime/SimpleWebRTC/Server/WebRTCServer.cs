@@ -23,6 +23,7 @@ namespace cakeslice.SimpleWebRTC
         public HttpListener listener;
         Thread acceptThread;
         string allowedOrigin;
+        bool suppressCorsHeaders;
         bool serverStopped;
         readonly BufferPool bufferPool;
         readonly ConcurrentDictionary<int, Connection> connections = new ConcurrentDictionary<int, Connection>();
@@ -84,8 +85,14 @@ namespace cakeslice.SimpleWebRTC
         [Obsolete]
         public void Listen(List<Common.ICEServer> iceServers, int port, string origin)
         {
+            Listen(iceServers, port, origin, false);
+        }
+
+        public void Listen(List<Common.ICEServer> iceServers, int port, string origin, bool suppressCorsHeaders)
+        {
             this.iceServers = iceServers;
             allowedOrigin = origin;
+            this.suppressCorsHeaders = suppressCorsHeaders;
 
             listener = new HttpListener();
             listener.Prefixes.Add("http://" + "*:" + port + "/");
@@ -111,9 +118,12 @@ namespace cakeslice.SimpleWebRTC
 
                         if (req.Url.AbsolutePath.Contains("/offer/"))
                         {
-                            resp.Headers["Access-Control-Allow-Origin"] = allowedOrigin;
+                            if (!suppressCorsHeaders)
+                            {
+                                resp.Headers["Access-Control-Allow-Origin"] = allowedOrigin;
+                            }
                             resp.Headers["Access-Control-Allow-Methods"] = "GET";
-                            resp.Headers["Access-Control-Allow-Headers"] = "Content-Type, ngrok-skip-browser-warning";
+                            resp.Headers["Access-Control-Allow-Headers"] = "Content-Type";
                             resp.Headers["Content-Type"] = "application/json";
 
                             if (req.HttpMethod == "OPTIONS")
@@ -139,9 +149,12 @@ namespace cakeslice.SimpleWebRTC
                         }
                         else if (req.Url.AbsolutePath.Contains("/answer/"))
                         {
-                            resp.Headers["Access-Control-Allow-Origin"] = allowedOrigin;
+                            if (!suppressCorsHeaders)
+                            {
+                                resp.Headers["Access-Control-Allow-Origin"] = allowedOrigin;
+                            }
                             resp.Headers["Access-Control-Allow-Methods"] = "POST";
-                            resp.Headers["Access-Control-Allow-Headers"] = "Content-Type, ngrok-skip-browser-warning";
+                            resp.Headers["Access-Control-Allow-Headers"] = "Content-Type";
                             resp.Headers["Content-Type"] = "application/json";
 
                             if (req.HttpMethod == "OPTIONS")

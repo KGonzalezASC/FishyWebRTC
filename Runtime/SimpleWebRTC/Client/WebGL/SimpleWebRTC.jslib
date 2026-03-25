@@ -136,7 +136,6 @@ var SimpleWebRTCPlugin = {
             method: "GET",
             headers: {
                "Content-Type": "application/json",
-               "ngrok-skip-browser-warning": "true",
             },
          })
             .then(function (response) {
@@ -171,7 +170,6 @@ var SimpleWebRTCPlugin = {
                                     method: "POST",
                                     headers: {
                                        "Content-Type": "application/json",
-                                       "ngrok-skip-browser-warning": "true",
                                     },
                                     body: JSON.stringify({
                                        connId: connId,

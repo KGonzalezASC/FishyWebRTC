@@ -61,6 +61,13 @@ namespace FishNet.Transporting.FishyWebRTC
         [SerializeField]
         private int _maximumClients = 2000;
 
+        /// <summary>
+        /// Disable when running behind a reverse proxy that adds its own CORS headers (e.g. Edgegap TLS Upgrade).
+        /// </summary>
+        [Tooltip("Disable when running behind a reverse proxy that adds its own CORS headers (e.g. Edgegap TLS Upgrade).")]
+        [SerializeField]
+        private bool _suppressCorsHeaders = false;
+
         [Header("Client")]
         /// <summary>
         /// Address to connect.
@@ -114,6 +121,12 @@ namespace FishNet.Transporting.FishyWebRTC
         {
             base.Initialize(networkManager, transportIndex);
         }
+
+        /// <summary>Sets the signaling server address for the client to connect to.</summary>
+        public void SetSignalingAddress(string address) => _clientAddress = address;
+
+        /// <summary>Sets the signaling port for the client to connect to.</summary>
+        public void SetSignalingPort(ushort port) => _port = port;
 
         protected void OnDestroy()
         {
@@ -362,7 +375,7 @@ namespace FishNet.Transporting.FishyWebRTC
         {
             _port = port;
         }
-        
+
         /// <summary>
         /// Sets whether to use HTTPS for signaling.
         /// Call this before StartConnection() to configure the client.
@@ -384,9 +397,9 @@ namespace FishNet.Transporting.FishyWebRTC
             _noClientPort = noPort;
         }
 
-// ============================================================================
-// OPTIONAL: Add getter methods if you need to read current state
-// ============================================================================
+        // ============================================================================
+        // OPTIONAL: Add getter methods if you need to read current state
+        // ============================================================================
 
         /// <summary>
         /// Gets whether HTTPS is enabled for signaling.
@@ -403,7 +416,7 @@ namespace FishNet.Transporting.FishyWebRTC
         {
             return _noClientPort;
         }
-        
+
         /// <summary>
         /// Gets which port to use.
         /// </summary>
@@ -475,7 +488,7 @@ namespace FishNet.Transporting.FishyWebRTC
         {
 #if !UNITY_WEBGL || UNITY_EDITOR
             _server.Initialize(this, _mtu);
-            return _server.StartConnection(iceServers, _port, _maximumClients, _origin);
+            return _server.StartConnection(iceServers, _port, _maximumClients, _origin, _suppressCorsHeaders);
 #else
 			throw new Exception(serverOnlyException);
 #endif
